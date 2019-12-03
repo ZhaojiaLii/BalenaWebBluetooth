@@ -1,7 +1,7 @@
 {
-  "name": "balena-ble-demo",
+  "name": "ble-project",
   "version": "1.0.0",
-  "description": "A sample project to showcase Raspberry Pi BLE usage with balenaOS",
+  "description": "A project to control lock by using Raspberry Pi BLE usage with balenaOS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
   "keywords": [
     "BLE"
   ],
-  "author": "Rahul Thakoor <rahul@balena.io>",
+  "author": "zhli <li@brocelis.fr>",
   "license": "Apache-2.0",
   "dependencies": {
     "bleno": "*",

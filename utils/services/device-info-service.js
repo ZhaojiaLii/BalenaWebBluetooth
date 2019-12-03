@@ -7,16 +7,17 @@ const BlenoPrimaryService = bleno.PrimaryService;
 const CPUManufacturerCharacteristic = require("../characteristics/cpu-manufacturer-characteristic");
 const CPUSpeedCharacteristic = require("../characteristics/cpu-speed-characteristic");
 
-function CPUInfoService() {
-  CPUInfoService.super_.call(this, {
+
+function DeviceInfoService() {
+  DeviceInfoService.super_.call(this, {
     uuid: "fff1",
     characteristics: [
-      new CPUManufacturerCharacteristic(),
-      new CPUSpeedCharacteristic()
+        new CPUManufacturerCharacteristic(),
+        new CPUSpeedCharacteristic(),
     ]
   });
 }
 
-util.inherits(CPUInfoService, BlenoPrimaryService);
+util.inherits(DeviceInfoService, BlenoPrimaryService);
 
-module.exports = CPUInfoService;
+module.exports = DeviceInfoService;

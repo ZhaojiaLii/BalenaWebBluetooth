@@ -1,7 +1,9 @@
 class BalenaBLE {
   constructor() {
     this.device = null;
-    this.led = null;
+    this.lock = null;
+    this.autoPower = null;
+    this.powerLevel = null;
     this.cpuVendor = null;
     this.cpuSpeed = null;
     this.onDisconnected = this.onDisconnected.bind(this);
@@ -10,32 +12,45 @@ class BalenaBLE {
   /* the LED characteristic providing on/off capabilities */
   async setLedCharacteristic() {
     const service = await this.device.gatt.getPrimaryService(0xfff0);
-    const characteristic = await service.getCharacteristic(
-      "d7e84cb2-ff37-4afc-9ed8-5577aeb8454c"
+    this.lock = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb8454c"
     );
-    // characteristic.startNotifications();
-    this.led = characteristic;
-
-    await this.led.startNotifications();
-
-    this.led.addEventListener(
-      "characteristicvaluechanged",
-      handleLedStatusChanged
+    await this.lock.startNotifications();
+    this.autoPower = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb8454d"
     );
+    await this.autoPower.startNotifications();
+    // this.powerLevel = await service.getCharacteristic(
+    //     "d7e84cb2-ff37-4afc-9ed8-5577aeb8454e"
+    // );
+    // await this.powerLevel.startNotifications();
+
+
+    this.lock.addEventListener(
+        "characteristicvaluechanged",
+        handleLedStatusChanged
+    );
+    this.autoPower.addEventListener(
+        "characteristicvaluechanged",
+        handleLedStatusChanged
+    );
+    // this.powerLevel.addEventListener(
+    //     "characteristicvaluechanged",
+    //     handleLedStatusChanged
+    // );
   }
 
   /* the Device characteristic providing CPU information */
   async setDeviceCharacteristic() {
     const service = await this.device.gatt.getPrimaryService(0xfff1);
-    const vendor = await service.getCharacteristic(
-      "d7e84cb2-ff37-4afc-9ed8-5577aeb84542"
+    this.cpuVendor = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb84542"
     );
-    this.cpuVendor = vendor;
 
-    const speed = await service.getCharacteristic(
-      "d7e84cb2-ff37-4afc-9ed8-5577aeb84541"
+    this.cpuSpeed = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb84541"
     );
-    this.cpuSpeed = speed;
+
   }
 
   /* request connection to a BalenaBLE device */
@@ -43,12 +58,12 @@ class BalenaBLE {
     let options = {
       filters: [
         {
-          name: "balenaBLE"
+          name: "Relais"
         }
       ],
       optionalServices: [0xfff0, 0xfff1]
     };
-    if (navigator.bluetooth == undefined) {
+    if (navigator.bluetooth === undefined) {
       alert("Sorry, Your device does not support Web BLE!");
       return;
     }
@@ -69,9 +84,12 @@ class BalenaBLE {
 
   /* read LED state */
   async readLed() {
-    await this.led.readValue();
+    await this.lock.readValue();
   }
 
+  async readAuto() {
+    await this.autoPower.readValue();
+  }
   /* read CPU manufacturer */
   async readCPUVendor() {
     let vendor = await this.cpuVendor.readValue();
@@ -85,10 +103,22 @@ class BalenaBLE {
   }
 
   /* change LED state */
-  async writeLed(data) {
-    await this.led.writeValue(Uint8Array.of(data));
+  async writeLed1(data) {
+    await this.lock.writeValue(Uint8Array.of(data));
     await this.readLed();
   }
+
+  async writeAuto(data) {
+    await this.autoPower.writeValue(Uint8Array.of(data));
+    await this.readAuto();
+  }
+  // async readPower() {
+  //   await this.powerLevel.readValue();
+  // }
+  // async writePower(data) {
+  //   await this.powerLevel.writeValue(Uint8Array.of(data));
+  //   await this.readPower();
+  // }
 
   /* disconnect from peripheral */
   disconnect() {

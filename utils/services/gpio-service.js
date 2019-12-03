@@ -4,12 +4,18 @@ const bleno = require("bleno");
 
 const BlenoPrimaryService = bleno.PrimaryService;
 
-const LEDCharacteristic = require("../characteristics/led-characteristic");
+const LockCharacteristic = require("../characteristics/lock-characteristic");
+const AutoPowerSupplyCharacteristic = require("../characteristics/auto-power-supply-characteristic");
+const PowerLevelCharacteristic = require("../characteristics/power-level-characteristic");
 
 function GPIOService() {
   GPIOService.super_.call(this, {
     uuid: "fff0",
-    characteristics: [new LEDCharacteristic()]
+    characteristics: [
+        // new PowerLevelCharacteristic(),
+        new LockCharacteristic(),
+        new AutoPowerSupplyCharacteristic(),
+    ]
   });
 }
 

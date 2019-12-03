@@ -8,7 +8,7 @@ bleno.on("stateChange", state => {
   console.log(`on -> stateChange: ${state}`);
 
   if (state === "poweredOn") {
-    bleno.startAdvertising("balenaBLE", [
+    bleno.startAdvertising("Relais", [
       deviceInfoService.uuid,
       gpioService.uuid
     ]);

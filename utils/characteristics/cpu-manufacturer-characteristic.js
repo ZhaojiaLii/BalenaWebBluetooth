@@ -1,9 +1,6 @@
 const util = require("util");
 const si = require("systeminformation");
-
 const bleno = require("bleno");
-
-const Descriptor = bleno.Descriptor;
 const Characteristic = bleno.Characteristic;
 
 class CPUManufacturerCharacteristic {

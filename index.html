@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <meta charset="utf-8" />
-  <title>balenaBLE</title>
+  <title>BLE projet</title>
   <link rel="stylesheet" href="style.css" />
   <script src="ble-client.js"></script>
   <body>
-    <h1>balenaBLE</h1>
+    <h1>BLE projet</h1>
 
     <div class="lamp">
       <?xml version="1.0" encoding="iso-8859-1"?>
@@ -122,31 +122,30 @@
       </div>
       <div id="container" class="hidden">
         <label class="btn-light"
-          ><input type="checkbox" id="toggle" />
+        ><input type="checkbox" id="toggle1" />
+          <div></div>
+        </label>
+        <label class="btn-light"
+        ><input type="checkbox" id="toggle2" />
+          <div></div>
+        </label>
+        <label class="btn-light"
+        ><input type="checkbox" id="toggle3" />
+          <div></div>
+        </label>
+        <label class="btn-light"
+        ><input type="checkbox" id="toggle4" />
           <div></div>
         </label>
         <div id="device-info">
           <p>CPU: <span id="vendor"></span>@<span id="speed"></span>GHz</p>
+          <p>Power level: <span id="power"></span></p>
           <button id="btn-disconnect" onclick="disconnect()" class="btn">
             Disconnect
           </button>
         </div>
       </div>
     </div>
-    <footer>
-      <div>
-        Icons made by
-        <a
-          href="https://www.flaticon.com/authors/creaticca-creative-agency"
-          title="Creaticca Creative Agency"
-          >Creaticca Creative Agency</a
-        >
-        from
-        <a href="https://www.flaticon.com/" title="Flaticon"
-          >www.flaticon.com</a
-        >
-      </div>
-    </footer>
   </body>
 </html>
 <script>
@@ -158,14 +157,11 @@
     if (status) {
       for (let ray of rays) {
         ray.style.setProperty("display", "block");
-        let toggle = document.getElementById("toggle");
       }
-      toggle.checked = true;
     } else {
       for (let ray of rays) {
         ray.style.setProperty("display", "none");
       }
-      toggle.checked = false;
     }
   }
 
@@ -182,8 +178,11 @@
     document.getElementById("container").classList.add("hidden");
   }
 
-  var balenaBLE = new BalenaBLE();
-  var toggle = document.getElementById("toggle");
+  let balenaBLE = new BalenaBLE();
+  let toggle1 = document.getElementById("toggle1");
+  let toggle2 = document.getElementById("toggle2");
+  let toggle3 = document.getElementById("toggle3");
+
 
   /* connect to peripheral, load data and add event listeners */
   document
@@ -196,27 +195,57 @@
         await balenaBLE.setDeviceCharacteristic();
         document.getElementById("not-connected").classList.add("hidden");
         document.getElementById(
-          "vendor"
+                "vendor"
         ).textContent = await balenaBLE.readCPUVendor();
         document.getElementById(
-          "speed"
+                "speed"
         ).textContent = await balenaBLE.readCPUSpeed();
 
-        toggle.addEventListener("change", e => {
+        toggle3.addEventListener("change", e => {
           if (e.target.checked) {
-            balenaBLE.writeLed(1);
-            toggle.disabled = true;
+            balenaBLE.writeLed1(1);
+            toggle3.disabled = true;
             setTimeout(() => {
-              toggle.disabled = false;
+              toggle3.disabled = false;
             }, 1000);
           } else {
-            balenaBLE.writeLed(0);
-            toggle.disabled = true;
+            balenaBLE.writeLed1(0);
+            toggle3.disabled = true;
             setTimeout(() => {
-              toggle.disabled = false;
+              toggle3.disabled = false;
             }, 1000);
           }
         });
+        toggle2.addEventListener("change", e => {
+          if (e.target.checked) {
+            balenaBLE.writeAuto(1);
+            toggle2.disabled = true;
+            setTimeout(() => {
+              toggle2.disabled = false;
+            }, 1000);
+          } else {
+            balenaBLE.writeAuto(0);
+            toggle2.disabled = true;
+            setTimeout(() => {
+              toggle2.disabled = false;
+            }, 1000);
+          }
+        });
+        // toggle3.addEventListener("change", e => {
+        //   if (e.target.checked) {
+        //     balenaBLE.writePower(1);
+        //     toggle3.disabled = true;
+        //     setTimeout(() => {
+        //       toggle3.disabled = false;
+        //     }, 1000);
+        //   } else {
+        //     balenaBLE.writePower(0);
+        //     toggle3.disabled = true;
+        //     setTimeout(() => {
+        //       toggle3.disabled = false;
+        //     }, 1000);
+        //   }
+        // });
 
         document.getElementById("container").classList.remove("hidden");
       } catch (error) {
