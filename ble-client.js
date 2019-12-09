@@ -6,6 +6,7 @@ class BalenaBLE {
     this.powerLevel = null;
     this.cpuVendor = null;
     this.cpuSpeed = null;
+    this.power100 = null;
     this.onDisconnected = this.onDisconnected.bind(this);
   }
 
@@ -20,10 +21,10 @@ class BalenaBLE {
         "d7e84cb2-ff37-4afc-9ed8-5577aeb8454d"
     );
     await this.autoPower.startNotifications();
-    // this.powerLevel = await service.getCharacteristic(
-    //     "d7e84cb2-ff37-4afc-9ed8-5577aeb8454e"
-    // );
-    // await this.powerLevel.startNotifications();
+    this.powerLevel = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb8454e"
+    );
+    await this.powerLevel.startNotifications();
 
 
     this.lock.addEventListener(
@@ -34,10 +35,10 @@ class BalenaBLE {
         "characteristicvaluechanged",
         handleLedStatusChanged
     );
-    // this.powerLevel.addEventListener(
-    //     "characteristicvaluechanged",
-    //     handleLedStatusChanged
-    // );
+    this.powerLevel.addEventListener(
+        "characteristicvaluechanged",
+        handleLedStatusChanged
+    );
   }
 
   /* the Device characteristic providing CPU information */
@@ -51,6 +52,14 @@ class BalenaBLE {
         "d7e84cb2-ff37-4afc-9ed8-5577aeb84541"
     );
 
+    this.power100 = await service.getCharacteristic(
+        "d7e84cb2-ff37-4afc-9ed8-5577aeb84543"
+    );
+    await this.power100.startNotifications();
+    // this.power100.addEventListener(
+    //     "characteristicvaluechanged",
+    //     handleLedStatusChanged
+    // );
   }
 
   /* request connection to a BalenaBLE device */
@@ -112,13 +121,21 @@ class BalenaBLE {
     await this.autoPower.writeValue(Uint8Array.of(data));
     await this.readAuto();
   }
-  // async readPower() {
-  //   await this.powerLevel.readValue();
-  // }
-  // async writePower(data) {
-  //   await this.powerLevel.writeValue(Uint8Array.of(data));
-  //   await this.readPower();
-  // }
+  async readPower() {
+    await this.powerLevel.readValue();
+  }
+  async readPowerOutput() {
+    return await this.powerLevel.readValue();
+  }
+  async writePower(data) {
+    await this.powerLevel.writeValue(Uint8Array.of(data));
+    await this.readPower();
+  }
+  async readPower100() {
+    // const power100 = await this.power100.readValue();
+    // return decode(power100);
+    return await this.power100.readValue();
+  }
 
   /* disconnect from peripheral */
   disconnect() {

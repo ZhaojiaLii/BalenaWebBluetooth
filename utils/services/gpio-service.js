@@ -12,9 +12,9 @@ function GPIOService() {
   GPIOService.super_.call(this, {
     uuid: "fff0",
     characteristics: [
-        // new PowerLevelCharacteristic(),
-        new LockCharacteristic(),
+        new PowerLevelCharacteristic(),
         new AutoPowerSupplyCharacteristic(),
+        new LockCharacteristic(),
     ]
   });
 }

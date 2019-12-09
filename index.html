@@ -201,18 +201,23 @@
                 "speed"
         ).textContent = await balenaBLE.readCPUSpeed();
 
-        toggle3.addEventListener("change", e => {
+        toggle1.addEventListener("change", async e => {
           if (e.target.checked) {
-            balenaBLE.writeLed1(1);
-            toggle3.disabled = true;
+            await balenaBLE.writePower(1);
+            console.log(await balenaBLE.readPowerOutput());
+            console.log(await balenaBLE.readPower100());
+            document.getElementById(
+                    "power"
+            ).textContent = await balenaBLE.readPower100();
+            toggle1.disabled = true;
             setTimeout(() => {
-              toggle3.disabled = false;
+              toggle1.disabled = false;
             }, 1000);
           } else {
-            balenaBLE.writeLed1(0);
-            toggle3.disabled = true;
+            await balenaBLE.writePower(0);
+            toggle1.disabled = true;
             setTimeout(() => {
-              toggle3.disabled = false;
+              toggle1.disabled = false;
             }, 1000);
           }
         });
@@ -231,21 +236,21 @@
             }, 1000);
           }
         });
-        // toggle3.addEventListener("change", e => {
-        //   if (e.target.checked) {
-        //     balenaBLE.writePower(1);
-        //     toggle3.disabled = true;
-        //     setTimeout(() => {
-        //       toggle3.disabled = false;
-        //     }, 1000);
-        //   } else {
-        //     balenaBLE.writePower(0);
-        //     toggle3.disabled = true;
-        //     setTimeout(() => {
-        //       toggle3.disabled = false;
-        //     }, 1000);
-        //   }
-        // });
+        toggle3.addEventListener("change", e => {
+          if (e.target.checked) {
+            balenaBLE.writeLed1(1);
+            toggle3.disabled = true;
+            setTimeout(() => {
+              toggle3.disabled = false;
+            }, 1000);
+          } else {
+            balenaBLE.writeLed1(0);
+            toggle3.disabled = true;
+            setTimeout(() => {
+              toggle3.disabled = false;
+            }, 1000);
+          }
+        });
 
         document.getElementById("container").classList.remove("hidden");
       } catch (error) {
