@@ -38,7 +38,6 @@ class PowerLevel100Characteristic {
   }
 
   onReadRequest(offset, callback) {
-      console.log('get here');
     if (offset) {
       callback(this.RESULT_ATTR_NOT_LONG, null);
     } else {
@@ -59,7 +58,7 @@ class PowerLevel100Characteristic {
        buf.writeInt8(power80.readSync(), 1);
        buf.writeInt8(power60.readSync(), 2);
        buf.writeInt8(power40.readSync(), 3);
-       buf.writeInt8(power20.readSync(), 4);
+       buf.writeInt8(1, 4);
        callback(this.RESULT_SUCCESS, buf);
     }
   }

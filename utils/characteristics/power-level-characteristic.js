@@ -35,9 +35,8 @@ class PowerLevelCharacteristic {
     if (offset) {
       callback(this.RESULT_ATTR_NOT_LONG, null);
     } else {
-      const buf = Buffer.alloc(2);
+      const buf = Buffer.alloc(1);
       buf.writeUInt8(power.readSync(), 0);
-      buf.writeUInt8(power.readSync(), 1);
       callback(this.RESULT_SUCCESS, buf);
     }
   }

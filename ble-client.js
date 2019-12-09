@@ -132,9 +132,9 @@ class BalenaBLE {
     await this.readPower();
   }
   async readPower100() {
-    // const power100 = await this.power100.readValue();
-    // return decode(power100);
-    return await this.power100.readValue();
+    const power100 = await this.power100.readValue();
+    return decode(power100);
+    // return await this.power100.readValue();
   }
 
   /* disconnect from peripheral */
